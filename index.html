@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Frase motivacional</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg1: #0f172a; /* dark navy */
+      --bg2: #0ea5a4; /* teal */
+      --card: rgba(255,255,255,0.06);
+      --glass: rgba(255,255,255,0.08);
+      --accent: #ffcc00;
+      --radius: 18px;
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0}
+    body{
+      background: linear-gradient(135deg,var(--bg1) 0%, #082032 40%, #071428 60%);
+      display:flex;align-items:center;justify-content:center;padding:40px;color:#e6eef6;
+    }
+    .container{
+      width:min(820px,94%);
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:var(--radius);
+      padding:34px;
+      box-shadow: 0 10px 30px rgba(2,6,23,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255,255,255,0.03);
+    }
+    header{display:flex;align-items:center;gap:14px;margin-bottom:22px}
+    .logo{
+      width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--bg2),#7dd3fc);display:flex;align-items:center;justify-content:center;font-weight:800;color:#022;box-shadow:0 6px 18px rgba(14,165,164,0.15)
+    }
+    h1{font-size:20px;margin:0}
+    p.lead{margin:0;color:rgba(230,238,246,0.75);font-size:13px}
+
+    .card{
+      margin-top:10px;padding:28px;border-radius:14px;background:var(--card);display:flex;flex-direction:column;gap:18px;align-items:center;justify-content:center;min-height:160px;position:relative;overflow:hidden;
+      transition:transform .35s ease;
+    }
+    .phrase{
+      font-size:28px;font-weight:600;text-align:center;line-height:1.2;max-width:900px;padding:0 10px;transform-origin:center;opacity:1;transition:opacity .35s, transform .45s;
+    }
+    .author{font-size:13px;color:rgba(230,238,246,0.7);margin-top:6px}
+
+    .controls{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+    button{
+      border:0;padding:10px 16px;border-radius:10px;font-weight:600;cursor:pointer;background:linear-gradient(90deg,#101827,#0b1220);color:#e6eef6;border:1px solid rgba(255,255,255,0.04);box-shadow:0 6px 14px rgba(2,6,23,0.5);
+    }
+    button.secondary{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:9px 14px}
+    button:active{transform:translateY(1px)}
+
+    .accent-line{height:6px;border-radius:999px;background:linear-gradient(90deg,var(--bg2),#a78bfa);margin-top:18px}
+
+    /* small screens */
+    @media (max-width:480px){
+      .phrase{font-size:20px}
+      .logo{width:48px;height:48px}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">★</div>
+      <div>
+        <h1>Frase motivacional</h1>
+        <p class="lead">Un pequeño empujón para tu día — haz clic en "Nueva" para cambiarla.</p>
+      </div>
+    </header>
+
+    <div class="card" id="card">
+      <div class="phrase" id="phrase">Creando grandeza, un paso a la vez.</div>
+      <div class="author" id="author">— Anónimo</div>
+    </div>
+
+    <div class="controls" style="margin-top:16px">
+      <button id="newBtn">Nueva frase</button>
+      <button class="secondary" id="copyBtn">Copiar</button>
+      <button class="secondary" id="shareBtn">Compartir</button>
+    </div>
+
+    <div class="accent-line"></div>
+  </div>
+
+  <script>
+    const phrases = [
+      {t: 'No esperes el momento perfecto — créalo.', a:'— Autor desconocido'},
+      {t: 'Hazlo con pasión o no lo hagas.', a:'— Rosa Nouchette Carey'},
+      {t: 'La disciplina vence a la motivación cuando ésta falla.', a:'— Anónimo'},
+      {t: 'Pequeños pasos cada día suman grandes resultados.', a:'— Anónimo'},
+      {t: 'Si puedes soñarlo, puedes hacerlo realidad.', a:'— Walt Disney'},
+      {t: 'Tu única competencia eres tú mismo.', a:'— Anónimo'},
+      {t: 'Convierte los obstáculos en combustible para avanzar.', a:'— Anónimo'},
+      {t: 'La constancia transforma lo imposible en posible.', a:'— Anónimo'}
+    ];
+
+    const phraseEl = document.getElementById('phrase');
+    const authorEl = document.getElementById('author');
+    const card = document.getElementById('card');
+
+    function showRandom(){
+      const idx = Math.floor(Math.random() * phrases.length);
+      // simple fade & scale animation
+      phraseEl.style.opacity = 0;
+      phraseEl.style.transform = 'scale(0.97) translateY(6px)';
+      setTimeout(()=>{
+        phraseEl.textContent = phrases[idx].t;
+        authorEl.textContent = phrases[idx].a;
+        phraseEl.style.opacity = 1;
+        phraseEl.style.transform = 'scale(1) translateY(0)';
+        // subtle card pulse
+        card.style.transform = 'translateY(-6px)';
+        setTimeout(()=> card.style.transform = 'translateY(0) ', 260);
+      }, 220);
+    }
+
+    document.getElementById('newBtn').addEventListener('click', showRandom);
+
+    document.getElementById('copyBtn').addEventListener('click', async ()=>{
+      const text = phraseEl.textContent + ' ' + authorEl.textContent;
+      try{ await navigator.clipboard.writeText(text); alert('Frase copiada al portapapeles'); }
+      catch(e){ prompt('Copia manualmente:', text); }
+    });
+
+    document.getElementById('shareBtn').addEventListener('click', async ()=>{
+      const text = phraseEl.textContent + ' ' + authorEl.textContent;
+      if(navigator.share){
+        try{ await navigator.share({text}); }
+        catch(e){ alert('No se pudo compartir — inténtalo manualmente.'); }
+      } else {
+        prompt('Comparte esta frase:', text);
+      }
+    });
+
+    // show a random phrase on load
+    window.addEventListener('load', ()=>{
+      const initial = Math.floor(Math.random() * phrases.length);
+      phraseEl.textContent = phrases[initial].t;
+      authorEl.textContent = phrases[initial].a;
+    });
+  </script>
+</body>
+</html>
